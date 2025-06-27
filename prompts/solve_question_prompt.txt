@@ -1,0 +1,2 @@
+Resolva a questão o exame da ordem a OAB abaixo. 
+Forneça a resposta no formato "resposta: [alternativa]", em que alternativa é A, B, C ou D.
