@@ -1,9 +1,0 @@
-A partir da questão da OAB e da resolução comentada a seguir, extraia do problema jurídico a estrutura IRAC (Issue, Rule, Application, Conclusion). 
-
-Em "Rule", liste todas as doutrinas, princípios, leis e dispositivos constitucionais citados na resolução comentada. Não mencione nenhuma alternativa da questão explicitamente. 
-
-A saída deve ser em formato JSON com as chaves "Issue", "Rule", "Application" e "Conclusion". 
-
-A chave "Rule" deve ter sub-chaves: "constituicao_federal", "codigo_penal", "codigo_processo_penal", "clt", "codigo_civil", "codigo_processo_civil", "codigo_direito_consumidor", "estatuto_crianca_adolescente", "sumula_stj", "estatuto_oab", "codigo_tributario_nacional", "principio_geral_do_direito" e "outros".
-
-Para cada uma dessas sub-chaves, adicione a chave "lei", com o número, parágrafo, artigo ou inciso da lei, exemplo, "Art. 194 da Constituição Federal de 1988", e uma chave "conteudo", com o conteúdo da lei que a resolução comentada por ventura detalhe, como ""A seguridade social compreende um conjunto integrado de ações de iniciativa dos Poderes Públicos e da sociedade, destinadas a assegurar os direitos relativos à saúde, à previdência e à assistência social.".
