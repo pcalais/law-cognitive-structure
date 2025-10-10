@@ -1,0 +1,2 @@
+Sınav sorusunu aşağıda çözünüz.
+Cevabı şu formatta veriniz: "cevap: [seçenek]", burada seçenek A, B, C veya D olacaktır.
