@@ -1,2 +1,17 @@
-Resolva a questão do exame da ordem da OAB abaixo. 
-Forneça a resposta no formato "resposta: [alternativa]", em que alternativa é A, B, C ou D.
+Resolva a questão juridica abaixo considerando a legislação brasileira. 
+Você deve resolvê-la usando o framework de raciocínio jurídico FIRAC (Facts, Issues, Rules, Application, Conclusion).
+
+Responda exclusivamente no formato JSON, sem markdown, com os seguintes campos, preenchendo de forma concisa e direta cada etapa FIRAC:
+{{
+ "F":"{{F}}",
+ "I": "{{I}}",
+ "R": "{{R}}",
+ "A": "{{A}}",
+ "C": "{{C}}",
+ "resposta": "A/B/C/D"
+}}
+
+Os campos F/I/R/A/C já preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
+
+Questão:
+{{questao}}
