@@ -1,15 +1,29 @@
 A partir da questão da OAB e da resolução comentada a seguir, extraia do problema jurídico a estrutura FIRAC (Facts, Issue, Rule, Application, Conclusion). 
+Restrinja-se apenas ao que é mencionado a resolução comentada, mas não mencione a resolução comentada diretamente.
 A saída deve ser em formato JSON com as chaves "Facts", "Issue", "Rule", "Application" e "Conclusion". 
 
-- Facts (Fatos): Identificação detalhada dos eventos relevantes que geraram a disputa jurídica. Gere uma lista de fatos.
+- Facts (Fatos): Identificação detalhada dos eventos relevantes que geraram a disputa jurídica. Gere uma lista de fatos a partir do que é mencionado no enunciado da questão. Deve ser uma lista ([]).
 - Issue (Problema Jurídico): Formulação precisa da questão jurídica central a ser analisada e resolvida.
 - Rule (Direito Aplicável): Seleção das normas jurídicas pertinentes ao problema.
 
-Liste todas as doutrinas, princípios, leis e dispositivos constitucionais citados na resolução comentada. Não mencione nenhuma alternativa da questão explicitamente. 
+Liste todas as leis e dispositivos constitucionais citados na resolução comentada. Não mencione nenhuma alternativa da questão explicitamente. 
 
-A chave "Rule" deve ter as seguintes sub-chaves: "constituicao_federal", "codigo_penal", "codigo_processo_penal", "clt", "codigo_civil", "codigo_processo_civil", "codigo_direito_consumidor", "estatuto_crianca_adolescente", "sumula_stj", "estatuto_oab", "codigo_tributario_nacional", e "principio_geral_do_direito".
+A chave "Rule" deve ter os seguintes campos, que representam fontes do Direito: "constituicao_federal", "codigo_penal", "codigo_processo_penal", "clt", "codigo_civil", "codigo_processo_civil", "codigo_direito_consumidor", "estatuto_crianca_adolescente", "sumula_stj", "estatuto_oab", "codigo_etica_disciplina_oab","codigo_tributario_nacional", "lei_federal" e "doutrina". 
 
-Para cada uma dessas sub-chaves, adicione a chave "lei", com o número, parágrafo, artigo ou inciso da lei, exemplo, "Art. 194 da Constituição Federal de 1988", e uma chave "conteudo", com o conteúdo da lei que a resolução comentada por ventura detalhe, como ""A seguridade social compreende um conjunto integrado de ações de iniciativa dos Poderes Públicos e da sociedade, destinadas a assegurar os direitos relativos à saúde, à previdência e à assistência social.".
+Para cada uma dessas fontes, o JSON deve ter uma lista de leis mencionadas na resolução comentada.
+Mencione cada lei apenas uma vez. Não inclua conceitos jurídicos abstratos, apenas leis específicas.
+Cada lei deve ser um dicionário com os campos "numero" e "conteúdo". Por exemplo, 
+
+[
+    {
+      "numero": "Art. 356 do Código Civil",
+      "conteudo": "O credor pode consentir em receber prestação diversa da que lhe é devida."
+    },
+    {
+      "numero": "Arts. 252 a 256 do Código Civil",
+      "conteudo": "Regulamentam as obrigações alternativas, que se caracterizam por uma única obrigação com pluralidade de prestações, ficando o devedor desobrigado com o adimplemento de qualquer uma delas."
+    }
+]
 
 - Application (Aplicação da Norma): Confronto das normas jurídicas com os fatos para justificar a solução. Não mencione nenhuma alternativa da questão explicitamente. 
 - Conclusion (Conclusão): Definição da solução jurídica proposta com base na análise de todos os itens anteriores. Não mencione nenhuma alternativa da questão explicitamente. 
