@@ -97,8 +97,6 @@ def read_model_runs(base_folder='../data/processed/model-runs'):
     # Concatena todos os DataFrames
     final_df = pd.concat(question_results, ignore_index=True)
 
-    # Cria coluna is_correct
-    final_df['is_correct'] = (final_df['alternativa'] == final_df['correct']).astype(int)
 
     # Reordena colunas
     cols = ["model_name", "firac", "language", "is_correct"] + [c for c in final_df.columns if c not in ["model_name", "firac", "language", "is_correct"]]
@@ -113,4 +111,13 @@ def read_model_runs(base_folder='../data/processed/model-runs'):
         .tolist()
     )
 
-    return final_df, gera_model_wide_df(final_df, firac_order), gera_question_wide_df(final_df, firac_order), firac_order
+    model_name_order = (
+        final_df.groupby('model_name')['is_correct']
+        .mean()
+        .sort_values(ascending=False)  # maior acurácia primeiro
+        .index
+        .tolist()
+    )
+
+
+    return final_df, gera_model_wide_df(final_df, firac_order), gera_question_wide_df(final_df, firac_order), firac_order, model_name_order
