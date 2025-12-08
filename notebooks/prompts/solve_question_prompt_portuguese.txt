@@ -11,7 +11,8 @@ Responda exclusivamente no formato JSON, sem markdown, com os seguintes campos, 
  "resposta": "A/B/C/D"
 }}
 
-Os campos F/I/R/A/C já preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
+Os campos F/I/R/A/C que já estão preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
+O campo "resposta" deve ser preenchido com a alternativa que você julga ser correta (A/B/C/D).
 
 Questão:
 {{questao}}
