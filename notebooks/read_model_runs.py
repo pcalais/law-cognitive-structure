@@ -8,30 +8,35 @@ import pandas as pd
 def gera_question_wide_df(question_long_df, firac_order=None):
     """
     Constrói um DataFrame wide em que:
-    - linhas: question_id
+    - linhas: (materia, question_id)
     - colunas: valores de firac
     - valores: acurácia média (mean of is_correct)
     - firac_order: lista opcional para ordenar as colunas
     """
-    # Agrupa por question_id e firac, calculando acurácia média
+
+    # Agrupa por materia, question_id e firac
     question_acc = (
-        question_long_df.groupby(['question_id', 'firac'])['is_correct']
+        question_long_df.groupby(['materia', 'question_id', 'firac'])['is_correct']
         .mean()
         .reset_index()
     )
-    
-    # Pivot para wide format
-    question_wide_df = question_acc.pivot(index='question_id', columns='firac', values='is_correct')
-    
+
+    # Pivot: agora o índice inclui 'materia'
+    question_wide_df = question_acc.pivot(
+        index=['materia', 'question_id'],
+        columns='firac',
+        values='is_correct'
+    )
+
     # Reordena colunas se firac_order for fornecido
     if firac_order is not None:
         firac_order_filtered = [f for f in firac_order if f in question_wide_df.columns]
         question_wide_df = question_wide_df[firac_order_filtered]
-    
+
     # Ordena as linhas pelo valor da coluna firac "____"
     if '____' in question_wide_df.columns:
         question_wide_df = question_wide_df.sort_values(by='____', ascending=False)
-    
+
     return question_wide_df
 
 

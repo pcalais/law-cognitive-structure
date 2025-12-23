@@ -1,0 +1,11 @@
+Resolva a questão juridica abaixo considerando a legislação brasileira. 
+Responda exclusivamente no seguinte formato JSON:
+{{
+ "resposta": "A/B/C/D"
+}}
+
+Preencha o campo "resposta" com a alternativa correta (A/B/C/D).
+
+Questão:
+{{questao}}
+
