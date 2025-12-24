@@ -12,9 +12,10 @@ Preencha o JSON abaixo, explicando de forma concisa e direta cada etapa FIRAC.
  "resposta": "A/B/C/D"
 }}
 
-Os campos F/I/R/A/C que já estão preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
-Preencha o campo "resposta" com a alternativa correta (A/B/C/D).
-Retorne apenas o JSON preenchido.
-
 Questão:
 {{questao}}
+
+Os campos F/I/R/A/C que já estão preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
+Preencha o campo "resposta" do JSON com a alternativa correta (A/B/C/D).
+Retorne apenas o JSON preenchido com sua resposta.
+Cheque que o JSON contém a chave "resposta" com a alternativa correta.
