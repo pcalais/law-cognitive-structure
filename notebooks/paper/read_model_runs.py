@@ -42,8 +42,12 @@ def get_question_wide_df(question_long_df, firac_order):
 
 
 
-def read_model_runs(base_folder='../data/processed/model-runs'):
+def read_model_runs(base_folder='../../data/processed/model-runs', exam_path="../../data/processed/oab_with_firac_portuguese_shuffle.csv"):
+
+    exam_df = pd.read_csv(exam_path)
+
     question_results = []
+
 
     # Lista todas as pastas dentro de model-runs (cada pasta é um idioma)
     languages = [name for name in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, name))]
@@ -80,6 +84,13 @@ def read_model_runs(base_folder='../data/processed/model-runs'):
     # Reordena colunas
     cols = ["model_name", "firac", "language", "is_correct"] + [c for c in final_df.columns if c not in ["model_name", "firac", "language", "is_correct"]]
     final_df = final_df[cols]
+
+    final_df = final_df.merge(
+        exam_df[["question_id", "tema"]],
+        on="question_id",
+        how="left"
+    )
+
 
     return final_df
 

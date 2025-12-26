@@ -1,7 +1,11 @@
 Resolva a questão juridica abaixo considerando a legislação brasileira. 
 Use o framework de raciocínio jurídico FIRAC (Facts, Issues, Rules, Application, Conclusion).
 
-Preencha o JSON abaixo, explicando de forma concisa e direta cada etapa FIRAC. 
+Questão:
+{{questao}}
+
+Responda exclusivamente no seguinte formato JSON, explicando de forma concisa e direta cada etapa FIRAC. 
+Os campos F/I/R/A/C que já estão preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
 
 {{
  "F":"{{F}}",
@@ -12,10 +16,7 @@ Preencha o JSON abaixo, explicando de forma concisa e direta cada etapa FIRAC.
  "resposta": "A/B/C/D"
 }}
 
-Questão:
-{{questao}}
+Além dos campos F/I/R/A/C não preenchidos, preencha também o campo "resposta" do JSON com a alternativa correta (A/B/C/D).
+Retorne apenas o JSON preenchido.
 
-Os campos F/I/R/A/C que já estão preenchidos não devem ser alterados e você deve usá-los como dicas para resolver a questão.
-Preencha o campo "resposta" do JSON com a alternativa correta (A/B/C/D).
-Retorne apenas o JSON preenchido com sua resposta.
-Cheque que o JSON contém a chave "resposta" com a alternativa correta.
+JSON:
