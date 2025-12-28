@@ -5,6 +5,10 @@ import re
 
 import pandas as pd
 
+def load_janderson(path=""):
+    exam_df = pd.read_csv(path)
+    return exam_df
+
 def get_question_wide_df(question_long_df, firac_order):
     """
     Converte question_long_df para formato wide:
@@ -80,6 +84,34 @@ def read_model_runs(base_folder='../../data/processed/model-runs', exam_path="..
     # Concatena todos os DataFrames
     final_df = pd.concat(question_results, ignore_index=True)
 
+    # JANDERSON
+    question_janderson_df = load_janderson("../../data/processed/model-runs/portuguese/FULL/qwen_oab.csv")
+    question_janderson_df = question_janderson_df.rename(columns={"model": "model_name"})
+    question_janderson_df["is_correct"] = (question_janderson_df["answer"] == question_janderson_df["correct_option"])
+    question_janderson_df = question_janderson_df.assign(
+        firac=question_janderson_df["hint"].map({
+            "no_hint": "_____",
+            "fact": "F____",
+            "issue": "FI___",
+            "rule": "FIR__",
+            "application": "FILA_",
+            "conclusion": "FIRAC"
+        })
+    )
+    question_janderson_df = pd.concat(
+    [   question_janderson_df,
+        question_janderson_df[question_janderson_df.firac == "_____"].assign(firac="unstructured")],
+        ignore_index=True
+    )
+
+
+    final_df = pd.concat(
+    [final_df, question_janderson_df],
+    axis=0,
+    ignore_index=True,
+    sort=False
+    )
+
 
     # Reordena colunas
     cols = ["model_name", "firac", "language", "is_correct"] + [c for c in final_df.columns if c not in ["model_name", "firac", "language", "is_correct"]]
@@ -94,15 +126,15 @@ def read_model_runs(base_folder='../../data/processed/model-runs', exam_path="..
 
     return final_df
 
-
 def filter_complete_questions(question_long_df, models, firacs):
     """
-    1) Filtra o DataFrame pelos models e firacs desejados
-    2) Mantém apenas question_id presentes em TODAS as combinações
-       (model_name, firac) desse subconjunto
-    3) Retorna também:
-       - model_order: modelos ordenados por acurácia média (↑)
-       - firac_order: firacs ordenados por acurácia média (↑)
+    Retorna:
+    - filtered_df: apenas questões completas
+    - question_wide_df
+    - model_order
+    - firac_order
+    - completeness_map_df: % de cobertura por (model_name, firac),
+      com zeros explícitos para combinações ausentes
     """
 
     # ----------------------------
@@ -117,17 +149,51 @@ def filter_complete_questions(question_long_df, models, firacs):
         .copy()
     )
 
+    total_questions = df["question_id"].nunique()
+
     # ----------------------------
-    # 2. Combinações esperadas
+    # 2. COMPLETENESS MAP (com grid completo)
     # ----------------------------
-    total_combinations = (
-        df[["model_name", "firac"]]
-        .drop_duplicates()
-        .shape[0]
+    # grid esperado (modelo × firac)
+    expected_grid = (
+        pd.MultiIndex
+        .from_product([models, firacs], names=["model_name", "firac"])
+        .to_frame(index=False)
+    )
+
+    observed_coverage = (
+        df
+        .drop_duplicates(subset=["question_id", "model_name", "firac"])
+        .groupby(["model_name", "firac"])["question_id"]
+        .nunique()
+        .reset_index(name="n_questions")
+    )
+
+    completeness_map_df = (
+        expected_grid
+        .merge(
+            observed_coverage,
+            on=["model_name", "firac"],
+            how="left"
+        )
+    )
+
+    completeness_map_df["n_questions"] = (
+        completeness_map_df["n_questions"].fillna(0).astype(int)
+    )
+
+    completeness_map_df["completeness_pct"] = (
+        completeness_map_df["n_questions"] / total_questions
+        if total_questions > 0 else 0
     )
 
     # ----------------------------
-    # 3. Cobertura por question_id
+    # 3. Combinações ESPERADAS
+    # ----------------------------
+    total_combinations = len(models) * len(firacs)
+
+    # ----------------------------
+    # 4. Cobertura por question_id
     # ----------------------------
     question_coverage = (
         df
@@ -137,7 +203,7 @@ def filter_complete_questions(question_long_df, models, firacs):
     )
 
     # ----------------------------
-    # 4. Question_ids completos
+    # 5. Question_ids completos
     # ----------------------------
     complete_question_ids = question_coverage.loc[
         question_coverage["n_combinations"] == total_combinations,
@@ -151,7 +217,7 @@ def filter_complete_questions(question_long_df, models, firacs):
     )
 
     # ----------------------------
-    # 5. Ordem dos MODELOS por acurácia
+    # 6. Ordem dos MODELOS por acurácia
     # ----------------------------
     model_order = (
         filtered_df
@@ -160,10 +226,11 @@ def filter_complete_questions(question_long_df, models, firacs):
         .sort_values(ascending=True)
         .index
         .tolist()
+        if not filtered_df.empty else []
     )
 
     # ----------------------------
-    # 6. Ordem dos FIRACs por acurácia
+    # 7. Ordem dos FIRACs por acurácia
     # ----------------------------
     firac_order = (
         filtered_df
@@ -172,6 +239,13 @@ def filter_complete_questions(question_long_df, models, firacs):
         .sort_values(ascending=True)
         .index
         .tolist()
+        if not filtered_df.empty else []
     )
 
-    return filtered_df, get_question_wide_df(filtered_df, firac_order), model_order, firac_order
+    return (
+        filtered_df,
+        get_question_wide_df(filtered_df, firac_order),
+        model_order,
+        firac_order,
+        completeness_map_df
+    )
