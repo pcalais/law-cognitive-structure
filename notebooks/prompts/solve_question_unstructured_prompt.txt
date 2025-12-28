@@ -1,4 +1,4 @@
-Resolva a questão juridica abaixo considerando a legislação brasileira.
+Resolva a questão juridica abaixo considerando a legislação brasileira. 
 
 Questão:
 {{questao}}
