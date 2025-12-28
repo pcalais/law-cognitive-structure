@@ -1,2 +1,0 @@
-Aşağıdaki hukuki soruyu Brezilya mevzuatını dikkate alarak çözünüz.
-Cevabı şu formatta veriniz: "cevap: [seçenek]", burada seçenek A, B, C veya D olacaktır.
