@@ -9,6 +9,45 @@ def load_janderson(path=""):
     exam_df = pd.read_csv(path)
     return exam_df
 
+
+def build_law_subfield(question_long_df):
+    law_subfield_map = {
+    "DIREITO CIVIL": "Civil Law",
+    "DIREITOS HUMANOS": "Human Rights Law",
+    "ÉTICA PROFISSIONAL": "Professional Ethics",
+    "DIREITO CONSTITUCIONAL": "Constitutional Law",
+    "DIREITO TRIBUTÁRIO": "Tax Law",
+    "DIREITO DO TRABALHO": "Labor Law",
+    "DIREITO AMBIENTAL": "Environmental Law",
+    "DIREITO DO CONSUMIDOR": "Consumer Law",
+    "FILOSOFIA": "Legal Philosophy",
+    "ECA": "Children and Adolescents Law",
+    "DIREITO EMPRESARIAL": "Business Law",
+    "DIREITO INTERNACIONAL": "International Law",
+    "PROCESSO DO TRABALHO": "Labor Procedure Law",
+    "DIREITO PREVIDENCIÁRIO": "Social Security Law",
+    "DIREITO ELEITORAL": "Electoral Law",
+    "DIREITO ADMINISTRATIVO": "Administrative Law",
+    "PROCESSO CIVIL": "Civil Procedure Law",
+    "DIREITO FINANCEIRO": "Financial Law",
+    "DIREITO PENAL": "Criminal Law",
+    "PROCESSO PENAL": "Criminal Procedure Law"
+    }
+
+    question_long_df["law_subfield"] = (
+        question_long_df["materia"]
+        .map(law_subfield_map)
+    )
+
+    unmapped = question_long_df[
+        question_long_df["law_subfield"].isna()
+    ]["materia"].unique()
+
+    print("Unmapped subfields:", unmapped)
+
+    return question_long_df
+
+
 def get_question_wide_df(question_long_df, firac_order):
     """
     Converte question_long_df para formato wide:
@@ -21,7 +60,7 @@ def get_question_wide_df(question_long_df, firac_order):
     question_wide_df = (
         question_long_df
         .pivot_table(
-            index=["question_id", "model_name"],
+            index=["question_id", "materia", "law_subfield", "model_name"],
             columns="firac",
             values="is_correct",
             aggfunc="first"   # seguro se já houver unicidade
@@ -35,7 +74,7 @@ def get_question_wide_df(question_long_df, firac_order):
     # ----------------------------
     # Reordena colunas FIRAC
     # ----------------------------
-    base_cols = ["question_id", "model_name"]
+    base_cols = ["question_id", "materia", "law_subfield", "model_name"]
     firac_cols = [c for c in firac_order if c in question_wide_df.columns]
 
     question_wide_df = question_wide_df[
@@ -117,13 +156,14 @@ def read_model_runs(base_folder='../../data/processed/model-runs', exam_path="..
     cols = ["model_name", "firac", "language", "is_correct"] + [c for c in final_df.columns if c not in ["model_name", "firac", "language", "is_correct"]]
     final_df = final_df[cols]
 
+
     final_df = final_df.merge(
         exam_df[["question_id", "tema"]],
         on="question_id",
         how="left"
     )
 
-
+    final_df = build_law_subfield(final_df)
     return final_df
 
 def filter_complete_questions(question_long_df, models, firacs):
