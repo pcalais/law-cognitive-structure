@@ -5,7 +5,7 @@ Questão:
 
 Responda exclusivamente no seguinte formato JSON:
 {{
- "resposta": "A/B/C/D"
+ "resposta": ""
 }}
 
 Preencha o campo "resposta" com a alternativa correta (A/B/C/D).

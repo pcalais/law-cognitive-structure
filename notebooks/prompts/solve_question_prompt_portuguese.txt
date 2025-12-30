@@ -13,7 +13,7 @@ Os campos F/I/R/A/C que já estão preenchidos não devem ser alterados e você 
  "R": "{{R}}",
  "A": "{{A}}",
  "C": "{{C}}",
- "resposta": "A/B/C/D"
+ "resposta": ""
 }}
 
 Além dos campos F/I/R/A/C não preenchidos, preencha também o campo "resposta" do JSON com a alternativa correta (A/B/C/D).
